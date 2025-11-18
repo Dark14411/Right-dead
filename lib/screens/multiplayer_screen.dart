@@ -3,20 +3,12 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class MenuScreen extends PositionComponent
+class MultiplayerScreen extends PositionComponent
     with TapCallbacks, HasGameRef<FlameGame> {
-  final VoidCallback onPlayPressed;
-  final VoidCallback onOptionsPressed;
-  final VoidCallback onCreditsPressed;
-  final VoidCallback onMultiplayerPressed;
-  late SpriteComponent menuBackground;
+  final VoidCallback onBackPressed;
+  late SpriteComponent multiplayerBackground;
 
-  MenuScreen({
-    required this.onPlayPressed,
-    required this.onOptionsPressed,
-    required this.onCreditsPressed,
-    required this.onMultiplayerPressed,
-  });
+  MultiplayerScreen({required this.onBackPressed});
 
   @override
   Future<void> onLoad() async {
@@ -26,8 +18,8 @@ class MenuScreen extends PositionComponent
     size = gameRef.size;
     position = Vector2.zero();
 
-    // Cargar la imagen del menú
-    final sprite = await Sprite.load('Menu.png');
+    // Cargar la imagen de multijugador
+    final sprite = await Sprite.load('Multijugador(in).png');
 
     // Calcular tamaño manteniendo aspecto (como video de YouTube)
     final imageSize = sprite.srcSize;
@@ -51,34 +43,19 @@ class MenuScreen extends PositionComponent
       (gameRef.size.y - displaySize.y) / 2,
     );
 
-    menuBackground = SpriteComponent(
+    multiplayerBackground = SpriteComponent(
       sprite: sprite,
       size: displaySize,
       position: displayPosition,
     );
 
-    add(menuBackground);
+    add(multiplayerBackground);
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    // Detectar en qué cuarto de la pantalla se hizo clic
-    final tapY = event.localPosition.y;
-    final screenHeight = gameRef.size.y;
-
-    if (tapY < screenHeight / 4) {
-      // Cuarto superior - Jugar
-      onPlayPressed();
-    } else if (tapY < (screenHeight * 2) / 4) {
-      // Segundo cuarto - Opciones
-      onOptionsPressed();
-    } else if (tapY < (screenHeight * 3) / 4) {
-      // Tercer cuarto - Créditos
-      onCreditsPressed();
-    } else {
-      // Cuarto inferior - Multijugador
-      onMultiplayerPressed();
-    }
+    // Al hacer clic en cualquier parte de multijugador, volver al menú
+    onBackPressed();
   }
 
   @override
@@ -86,8 +63,8 @@ class MenuScreen extends PositionComponent
     super.onGameResize(newSize);
     size = newSize;
 
-    if (menuBackground.sprite != null) {
-      final imageSize = menuBackground.sprite!.srcSize;
+    if (multiplayerBackground.sprite != null) {
+      final imageSize = multiplayerBackground.sprite!.srcSize;
       final screenRatio = newSize.x / newSize.y;
       final imageRatio = imageSize.x / imageSize.y;
 
@@ -99,8 +76,8 @@ class MenuScreen extends PositionComponent
         displaySize = Vector2(newSize.x, newSize.x / imageRatio);
       }
 
-      menuBackground.size = displaySize;
-      menuBackground.position = Vector2(
+      multiplayerBackground.size = displaySize;
+      multiplayerBackground.position = Vector2(
         (newSize.x - displaySize.x) / 2,
         (newSize.y - displaySize.y) / 2,
       );

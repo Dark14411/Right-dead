@@ -5,9 +5,18 @@ import 'screens/options_screen.dart';
 import 'screens/credits_screen.dart';
 import 'screens/continue_screen.dart';
 import 'screens/extra_menu_screen.dart';
+import 'screens/multiplayer_screen.dart';
 import 'screens/game_screen.dart';
 
-enum GameState { menu, options, credits, resume, extraMenu, playing }
+enum GameState {
+  menu,
+  options,
+  credits,
+  resume,
+  extraMenu,
+  multiplayer,
+  playing,
+}
 
 class MenuGame extends FlameGame {
   GameState currentState = GameState.menu;
@@ -17,6 +26,7 @@ class MenuGame extends FlameGame {
   late CreditsScreen creditsScreen;
   late ContinueScreen continueScreen;
   late ExtraMenuScreen extraMenuScreen;
+  late MultiplayerScreen multiplayerScreen;
   late GameScreen gameScreen;
 
   @override
@@ -31,6 +41,7 @@ class MenuGame extends FlameGame {
       onPlayPressed: showGame,
       onOptionsPressed: showOptions,
       onCreditsPressed: showCredits,
+      onMultiplayerPressed: showMultiplayer,
     );
     optionsScreen = OptionsScreen(onBackPressed: showMenu);
     creditsScreen = CreditsScreen(onBackPressed: showMenu);
@@ -38,6 +49,7 @@ class MenuGame extends FlameGame {
       onContinuePressed: showGame,
     ); // Por ahora va al juego
     extraMenuScreen = ExtraMenuScreen(onBackPressed: showMenu);
+    multiplayerScreen = MultiplayerScreen(onBackPressed: showMenu);
     gameScreen = GameScreen();
 
     // Cargar la pantalla de menú
@@ -74,6 +86,12 @@ class MenuGame extends FlameGame {
     add(extraMenuScreen);
   }
 
+  void showMultiplayer() {
+    remove(menuScreen);
+    currentState = GameState.multiplayer;
+    add(multiplayerScreen);
+  }
+
   void showMenu() {
     // Remover la pantalla actual y volver al menú
     if (currentState == GameState.options) {
@@ -84,6 +102,8 @@ class MenuGame extends FlameGame {
       remove(continueScreen);
     } else if (currentState == GameState.extraMenu) {
       remove(extraMenuScreen);
+    } else if (currentState == GameState.multiplayer) {
+      remove(multiplayerScreen);
     }
     currentState = GameState.menu;
     add(menuScreen);
