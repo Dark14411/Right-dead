@@ -3,13 +3,12 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class MenuScreen extends PositionComponent
+class OptionsScreen extends PositionComponent
     with TapCallbacks, HasGameRef<FlameGame> {
-  final VoidCallback onPlayPressed;
-  final VoidCallback onOptionsPressed;
-  late SpriteComponent menuBackground;
+  final VoidCallback onBackPressed;
+  late SpriteComponent optionsBackground;
 
-  MenuScreen({required this.onPlayPressed, required this.onOptionsPressed});
+  OptionsScreen({required this.onBackPressed});
 
   @override
   Future<void> onLoad() async {
@@ -19,8 +18,8 @@ class MenuScreen extends PositionComponent
     size = gameRef.size;
     position = Vector2.zero();
 
-    // Cargar la imagen del menú
-    final sprite = await Sprite.load('Menu.png');
+    // Cargar la imagen de opciones
+    final sprite = await Sprite.load('opciones.png');
 
     // Calcular tamaño manteniendo aspecto (como video de YouTube)
     final imageSize = sprite.srcSize;
@@ -44,29 +43,19 @@ class MenuScreen extends PositionComponent
       (gameRef.size.y - displaySize.y) / 2,
     );
 
-    menuBackground = SpriteComponent(
+    optionsBackground = SpriteComponent(
       sprite: sprite,
       size: displaySize,
       position: displayPosition,
     );
 
-    add(menuBackground);
+    add(optionsBackground);
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    // Detectar si se hizo clic en la parte superior (jugar) o inferior (opciones)
-    // Dividimos la pantalla en dos mitades verticales
-    final tapY = event.localPosition.y;
-    final screenHeight = gameRef.size.y;
-
-    if (tapY < screenHeight / 2) {
-      // Parte superior - Jugar
-      onPlayPressed();
-    } else {
-      // Parte inferior - Opciones
-      onOptionsPressed();
-    }
+    // Al hacer clic en cualquier parte de las opciones, volver al menú
+    onBackPressed();
   }
 
   @override
@@ -74,8 +63,8 @@ class MenuScreen extends PositionComponent
     super.onGameResize(newSize);
     size = newSize;
 
-    if (menuBackground.sprite != null) {
-      final imageSize = menuBackground.sprite!.srcSize;
+    if (optionsBackground.sprite != null) {
+      final imageSize = optionsBackground.sprite!.srcSize;
       final screenRatio = newSize.x / newSize.y;
       final imageRatio = imageSize.x / imageSize.y;
 
@@ -87,8 +76,8 @@ class MenuScreen extends PositionComponent
         displaySize = Vector2(newSize.x, newSize.x / imageRatio);
       }
 
-      menuBackground.size = displaySize;
-      menuBackground.position = Vector2(
+      optionsBackground.size = displaySize;
+      optionsBackground.position = Vector2(
         (newSize.x - displaySize.x) / 2,
         (newSize.y - displaySize.y) / 2,
       );
