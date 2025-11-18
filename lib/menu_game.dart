@@ -4,9 +4,10 @@ import 'screens/menu_screen.dart';
 import 'screens/options_screen.dart';
 import 'screens/credits_screen.dart';
 import 'screens/continue_screen.dart';
+import 'screens/extra_menu_screen.dart';
 import 'screens/game_screen.dart';
 
-enum GameState { menu, options, credits, resume, playing }
+enum GameState { menu, options, credits, resume, extraMenu, playing }
 
 class MenuGame extends FlameGame {
   GameState currentState = GameState.menu;
@@ -15,6 +16,7 @@ class MenuGame extends FlameGame {
   late OptionsScreen optionsScreen;
   late CreditsScreen creditsScreen;
   late ContinueScreen continueScreen;
+  late ExtraMenuScreen extraMenuScreen;
   late GameScreen gameScreen;
 
   @override
@@ -32,7 +34,10 @@ class MenuGame extends FlameGame {
     );
     optionsScreen = OptionsScreen(onBackPressed: showMenu);
     creditsScreen = CreditsScreen(onBackPressed: showMenu);
-    continueScreen = ContinueScreen(onContinuePressed: showGame); // Por ahora va al juego
+    continueScreen = ContinueScreen(
+      onContinuePressed: showGame,
+    ); // Por ahora va al juego
+    extraMenuScreen = ExtraMenuScreen(onBackPressed: showMenu);
     gameScreen = GameScreen();
 
     // Cargar la pantalla de menú
@@ -63,6 +68,12 @@ class MenuGame extends FlameGame {
     add(continueScreen);
   }
 
+  void showExtraMenu() {
+    remove(menuScreen);
+    currentState = GameState.extraMenu;
+    add(extraMenuScreen);
+  }
+
   void showMenu() {
     // Remover la pantalla actual y volver al menú
     if (currentState == GameState.options) {
@@ -71,6 +82,8 @@ class MenuGame extends FlameGame {
       remove(creditsScreen);
     } else if (currentState == GameState.resume) {
       remove(continueScreen);
+    } else if (currentState == GameState.extraMenu) {
+      remove(extraMenuScreen);
     }
     currentState = GameState.menu;
     add(menuScreen);
