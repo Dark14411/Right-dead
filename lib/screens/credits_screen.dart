@@ -3,18 +3,12 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
-class MenuScreen extends PositionComponent
+class CreditsScreen extends PositionComponent
     with TapCallbacks, HasGameRef<FlameGame> {
-  final VoidCallback onPlayPressed;
-  final VoidCallback onOptionsPressed;
-  final VoidCallback onCreditsPressed;
-  late SpriteComponent menuBackground;
+  final VoidCallback onBackPressed;
+  late SpriteComponent creditsBackground;
 
-  MenuScreen({
-    required this.onPlayPressed,
-    required this.onOptionsPressed,
-    required this.onCreditsPressed,
-  });
+  CreditsScreen({required this.onBackPressed});
 
   @override
   Future<void> onLoad() async {
@@ -24,8 +18,8 @@ class MenuScreen extends PositionComponent
     size = gameRef.size;
     position = Vector2.zero();
 
-    // Cargar la imagen del menú
-    final sprite = await Sprite.load('Menu.png');
+    // Cargar la imagen de créditos
+    final sprite = await Sprite.load('Creditos.png');
 
     // Calcular tamaño manteniendo aspecto (como video de YouTube)
     final imageSize = sprite.srcSize;
@@ -49,31 +43,19 @@ class MenuScreen extends PositionComponent
       (gameRef.size.y - displaySize.y) / 2,
     );
 
-    menuBackground = SpriteComponent(
+    creditsBackground = SpriteComponent(
       sprite: sprite,
       size: displaySize,
       position: displayPosition,
     );
 
-    add(menuBackground);
+    add(creditsBackground);
   }
 
   @override
   void onTapDown(TapDownEvent event) {
-    // Detectar en qué tercio de la pantalla se hizo clic
-    final tapY = event.localPosition.y;
-    final screenHeight = gameRef.size.y;
-
-    if (tapY < screenHeight / 3) {
-      // Tercio superior - Jugar
-      onPlayPressed();
-    } else if (tapY < (screenHeight * 2) / 3) {
-      // Tercio medio - Opciones
-      onOptionsPressed();
-    } else {
-      // Tercio inferior - Créditos
-      onCreditsPressed();
-    }
+    // Al hacer clic en cualquier parte de los créditos, volver al menú
+    onBackPressed();
   }
 
   @override
@@ -81,8 +63,8 @@ class MenuScreen extends PositionComponent
     super.onGameResize(newSize);
     size = newSize;
 
-    if (menuBackground.sprite != null) {
-      final imageSize = menuBackground.sprite!.srcSize;
+    if (creditsBackground.sprite != null) {
+      final imageSize = creditsBackground.sprite!.srcSize;
       final screenRatio = newSize.x / newSize.y;
       final imageRatio = imageSize.x / imageSize.y;
 
@@ -94,8 +76,8 @@ class MenuScreen extends PositionComponent
         displaySize = Vector2(newSize.x, newSize.x / imageRatio);
       }
 
-      menuBackground.size = displaySize;
-      menuBackground.position = Vector2(
+      creditsBackground.size = displaySize;
+      creditsBackground.position = Vector2(
         (newSize.x - displaySize.x) / 2,
         (newSize.y - displaySize.y) / 2,
       );
