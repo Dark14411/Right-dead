@@ -16,6 +16,8 @@ enum GameState {
   extraMenu,
   multiplayer,
   playing,
+  weaponsStore,
+  coinsStore,
 }
 
 class MenuGame extends FlameGame with HasCollisionDetection {
@@ -97,6 +99,31 @@ class MenuGame extends FlameGame with HasCollisionDetection {
     add(multiplayerScreen);
   }
 
+  void showWeaponsStore() {
+    // Show weapons store overlay
+    currentState = GameState.weaponsStore;
+    overlays.add('weaponsStore');
+  }
+
+  void showCoinsStore() {
+    // Switch from weapons store to coins store
+    if (currentState == GameState.weaponsStore) {
+      overlays.remove('weaponsStore');
+    }
+    currentState = GameState.coinsStore;
+    overlays.add('coinsStore');
+  }
+
+  void closeStore() {
+    // Close any active store overlay
+    if (currentState == GameState.weaponsStore) {
+      overlays.remove('weaponsStore');
+    } else if (currentState == GameState.coinsStore) {
+      overlays.remove('coinsStore');
+    }
+    currentState = GameState.menu;
+  }
+
   void showMenu() {
     // Remover la pantalla actual y volver al menú
     if (currentState == GameState.options) {
@@ -111,6 +138,10 @@ class MenuGame extends FlameGame with HasCollisionDetection {
       remove(multiplayerScreen);
     } else if (currentState == GameState.playing) {
       remove(gameScreen);
+    } else if (currentState == GameState.weaponsStore) {
+      overlays.remove('weaponsStore');
+    } else if (currentState == GameState.coinsStore) {
+      overlays.remove('coinsStore');
     }
     currentState = GameState.menu;
     add(menuScreen);

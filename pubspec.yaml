@@ -63,9 +63,7 @@ flutter:
   assets:
     - assets/images/
     - assets/Personajes/
-    - assets/Enemigos/
     - assets/images/bullet.png
-    - assets/Enemigos/Zombi 1/
     - assets/Personajes/Enemigo1/
     - assets/Personajes/Personaje 1/Personaje1(Con Arma)/
     - assets/Personajes/Personaje 1/Personaje1(Sin Arma)/

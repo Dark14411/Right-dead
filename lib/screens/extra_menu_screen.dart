@@ -54,8 +54,8 @@ class ExtraMenuScreen extends PositionComponent
 
   @override
   void onTapDown(TapDownEvent event) {
-    // Al hacer clic en cualquier parte del menú extra, volver atrás
-    onBackPressed();
+    // Al hacer clic en cualquier parte del menú extra, abrir la tienda
+    game.showWeaponsStore();
   }
 
   @override
