@@ -1,10 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import '../menu_game.dart';
 
 class MenuScreen extends PositionComponent
-    with TapCallbacks, HasGameRef<FlameGame> {
+    with TapCallbacks, HasGameReference<MenuGame> {
   final VoidCallback onPlayPressed;
   final VoidCallback onOptionsPressed;
   final VoidCallback onCreditsPressed;
@@ -23,7 +23,7 @@ class MenuScreen extends PositionComponent
     await super.onLoad();
 
     // Establecer tamaño del componente
-    size = gameRef.size;
+    size = game.size;
     position = Vector2.zero();
 
     // Cargar la imagen del menú
@@ -31,7 +31,7 @@ class MenuScreen extends PositionComponent
 
     // Calcular tamaño manteniendo aspecto (como video de YouTube)
     final imageSize = sprite.srcSize;
-    final screenRatio = gameRef.size.x / gameRef.size.y;
+    final screenRatio = game.size.x / game.size.y;
     final imageRatio = imageSize.x / imageSize.y;
 
     Vector2 displaySize;
@@ -39,16 +39,16 @@ class MenuScreen extends PositionComponent
 
     if (screenRatio > imageRatio) {
       // Pantalla más ancha - ajustar a la altura
-      displaySize = Vector2(gameRef.size.y * imageRatio, gameRef.size.y);
+      displaySize = Vector2(game.size.y * imageRatio, game.size.y);
     } else {
       // Pantalla más alta - ajustar al ancho
-      displaySize = Vector2(gameRef.size.x, gameRef.size.x / imageRatio);
+      displaySize = Vector2(game.size.x, game.size.x / imageRatio);
     }
 
     // Centrar la imagen
     displayPosition = Vector2(
-      (gameRef.size.x - displaySize.x) / 2,
-      (gameRef.size.y - displaySize.y) / 2,
+      (game.size.x - displaySize.x) / 2,
+      (game.size.y - displaySize.y) / 2,
     );
 
     menuBackground = SpriteComponent(
@@ -62,47 +62,62 @@ class MenuScreen extends PositionComponent
 
   @override
   void onTapDown(TapDownEvent event) {
-    // Detectar en qué cuarto de la pantalla se hizo clic
+    // Detectar en qué región se hizo clic
     final tapY = event.localPosition.y;
-    final screenHeight = gameRef.size.y;
-
-    if (tapY < screenHeight / 4) {
-      // Cuarto superior - Jugar
-      onPlayPressed();
-    } else if (tapY < (screenHeight * 2) / 4) {
-      // Segundo cuarto - Opciones
-      onOptionsPressed();
-    } else if (tapY < (screenHeight * 3) / 4) {
-      // Tercer cuarto - Créditos
-      onCreditsPressed();
-    } else {
-      // Cuarto inferior - Multijugador
-      onMultiplayerPressed();
+    final screenHeight = game.size.y;
+    
+    // Dividir la pantalla en 6 regiones verticales iguales
+    final regionHeight = screenHeight / 6;
+    final regionIndex = (tapY / regionHeight).floor();
+    
+    // Mapear cada región a una acción
+    switch (regionIndex) {
+      case 0:
+      case 1:
+        // Región superior (primeras dos franjas) - JUGAR
+        onPlayPressed();
+        break;
+      case 2:
+        // Región central-superior - CONTINUAR (va al juego también)
+        onPlayPressed();
+        break;
+      case 3:
+        // Región central - MULTIJUGADOR
+        onMultiplayerPressed();
+        break;
+      case 4:
+        // Región central-inferior - OPCIONES
+        onOptionsPressed();
+        break;
+      case 5:
+        // Región inferior - CRÉDITOS
+        onCreditsPressed();
+        break;
     }
   }
 
   @override
-  void onGameResize(Vector2 newSize) {
-    super.onGameResize(newSize);
-    size = newSize;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    this.size = size;
 
     if (menuBackground.sprite != null) {
       final imageSize = menuBackground.sprite!.srcSize;
-      final screenRatio = newSize.x / newSize.y;
+      final screenRatio = size.x / size.y;
       final imageRatio = imageSize.x / imageSize.y;
 
       Vector2 displaySize;
 
       if (screenRatio > imageRatio) {
-        displaySize = Vector2(newSize.y * imageRatio, newSize.y);
+        displaySize = Vector2(size.y * imageRatio, size.y);
       } else {
-        displaySize = Vector2(newSize.x, newSize.x / imageRatio);
+        displaySize = Vector2(size.x, size.x / imageRatio);
       }
 
       menuBackground.size = displaySize;
       menuBackground.position = Vector2(
-        (newSize.x - displaySize.x) / 2,
-        (newSize.y - displaySize.y) / 2,
+        (size.x - displaySize.x) / 2,
+        (size.y - displaySize.y) / 2,
       );
     }
   }

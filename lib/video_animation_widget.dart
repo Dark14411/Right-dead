@@ -34,7 +34,6 @@ class _VideoAnimationWidgetState extends State<VideoAnimationWidget> {
 
       await _controller.play();
     } catch (e) {
-      print('Error initializing video: $e');
       // Si falla, llamar a onFinished después de un breve delay
       Future.delayed(const Duration(seconds: 1), () {
         widget.onFinished();

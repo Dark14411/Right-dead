@@ -18,7 +18,7 @@ enum GameState {
   playing,
 }
 
-class MenuGame extends FlameGame {
+class MenuGame extends FlameGame with HasCollisionDetection {
   GameState currentState = GameState.menu;
 
   late MenuScreen menuScreen;
@@ -38,7 +38,7 @@ class MenuGame extends FlameGame {
 
     // Inicializar las pantallas
     menuScreen = MenuScreen(
-      onPlayPressed: showGame,
+      onPlayPressed: showGame, // Ir directamente al juego
       onOptionsPressed: showOptions,
       onCreditsPressed: showCredits,
       onMultiplayerPressed: showMultiplayer,
@@ -57,7 +57,12 @@ class MenuGame extends FlameGame {
   }
 
   void showGame() {
-    remove(menuScreen);
+    // Remover la pantalla anterior
+    if (currentState == GameState.menu) {
+      remove(menuScreen);
+    } else if (currentState == GameState.resume) {
+      remove(continueScreen);
+    }
     currentState = GameState.playing;
     add(gameScreen);
   }
@@ -104,6 +109,8 @@ class MenuGame extends FlameGame {
       remove(extraMenuScreen);
     } else if (currentState == GameState.multiplayer) {
       remove(multiplayerScreen);
+    } else if (currentState == GameState.playing) {
+      remove(gameScreen);
     }
     currentState = GameState.menu;
     add(menuScreen);

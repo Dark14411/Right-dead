@@ -30,7 +30,6 @@ class AnimationScreen extends Component {
       isInitialized = true;
       videoController!.play();
     } catch (e) {
-      print('Error loading video: $e');
       // Si hay un error, pasar directamente al juego después de 2 segundos
       Future.delayed(const Duration(seconds: 2), () {
         onAnimationEnd();

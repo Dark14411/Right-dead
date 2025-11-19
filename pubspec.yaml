@@ -62,29 +62,16 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
-
-  # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/to/resolution-aware-images
-
-  # For details regarding adding assets from package dependencies, see
-  # https://flutter.dev/to/asset-from-package
-
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
+    - assets/Personajes/
+    - assets/Enemigos/
+    - assets/images/bullet.png
+    - assets/Enemigos/Zombi 1/
+    - assets/Personajes/Enemigo1/
+    - assets/Personajes/Personaje 1/Personaje1(Con Arma)/
+    - assets/Personajes/Personaje 1/Personaje1(Sin Arma)/
+    - assets/Personajes/Personaje 2/Personaje2(Con Arma)/
+    - assets/Personajes/Personaje 2/Personaje2(Sin Arma)/
+    - assets/Personajes/Personaje 3/Personaje3(Con Arma)/
+    - assets/Personajes/Personaje 3/Personaje3(Sin Arma)/
+    - assets/Personajes/Personaje 4/Personaje4(Con Arma)/
+    - assets/Personajes/Personaje 4/Personaje4(Sin Arma)/

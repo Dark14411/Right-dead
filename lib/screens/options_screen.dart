@@ -1,10 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import '../menu_game.dart';
 
 class OptionsScreen extends PositionComponent
-    with TapCallbacks, HasGameRef<FlameGame> {
+    with TapCallbacks, HasGameReference<MenuGame> {
   final VoidCallback onBackPressed;
   late SpriteComponent optionsBackground;
 
@@ -15,7 +15,7 @@ class OptionsScreen extends PositionComponent
     await super.onLoad();
 
     // Establecer tamaño del componente
-    size = gameRef.size;
+    size = game.size;
     position = Vector2.zero();
 
     // Cargar la imagen de opciones
@@ -23,7 +23,7 @@ class OptionsScreen extends PositionComponent
 
     // Calcular tamaño manteniendo aspecto (como video de YouTube)
     final imageSize = sprite.srcSize;
-    final screenRatio = gameRef.size.x / gameRef.size.y;
+    final screenRatio = game.size.x / game.size.y;
     final imageRatio = imageSize.x / imageSize.y;
 
     Vector2 displaySize;
@@ -31,16 +31,16 @@ class OptionsScreen extends PositionComponent
 
     if (screenRatio > imageRatio) {
       // Pantalla más ancha - ajustar a la altura
-      displaySize = Vector2(gameRef.size.y * imageRatio, gameRef.size.y);
+      displaySize = Vector2(game.size.y * imageRatio, game.size.y);
     } else {
       // Pantalla más alta - ajustar al ancho
-      displaySize = Vector2(gameRef.size.x, gameRef.size.x / imageRatio);
+      displaySize = Vector2(game.size.x, game.size.x / imageRatio);
     }
 
     // Centrar la imagen
     displayPosition = Vector2(
-      (gameRef.size.x - displaySize.x) / 2,
-      (gameRef.size.y - displaySize.y) / 2,
+      (game.size.x - displaySize.x) / 2,
+      (game.size.y - displaySize.y) / 2,
     );
 
     optionsBackground = SpriteComponent(
@@ -59,27 +59,27 @@ class OptionsScreen extends PositionComponent
   }
 
   @override
-  void onGameResize(Vector2 newSize) {
-    super.onGameResize(newSize);
-    size = newSize;
+  void onGameResize(Vector2 size) {
+    super.onGameResize(size);
+    this.size = size;
 
     if (optionsBackground.sprite != null) {
       final imageSize = optionsBackground.sprite!.srcSize;
-      final screenRatio = newSize.x / newSize.y;
+      final screenRatio = size.x / size.y;
       final imageRatio = imageSize.x / imageSize.y;
 
       Vector2 displaySize;
 
       if (screenRatio > imageRatio) {
-        displaySize = Vector2(newSize.y * imageRatio, newSize.y);
+        displaySize = Vector2(size.y * imageRatio, size.y);
       } else {
-        displaySize = Vector2(newSize.x, newSize.x / imageRatio);
+        displaySize = Vector2(size.x, size.x / imageRatio);
       }
 
       optionsBackground.size = displaySize;
       optionsBackground.position = Vector2(
-        (newSize.x - displaySize.x) / 2,
-        (newSize.y - displaySize.y) / 2,
+        (size.x - displaySize.x) / 2,
+        (size.y - displaySize.y) / 2,
       );
     }
   }
